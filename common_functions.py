@@ -34,3 +34,10 @@ def generate_complete_graph(number_of_nodes):
         graph.append(distances)
         
     return graph
+
+def get_random_neighbor(solution):
+    random_neighbor = solution.copy()
+    i, j = random.sample(range(len(solution)), 2)
+    random_neighbor[i], random_neighbor[j] = random_neighbor[j], random_neighbor[i]
+
+    return random_neighbor

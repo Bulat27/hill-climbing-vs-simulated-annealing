@@ -1,13 +1,21 @@
 import random
 import math
-from common_functions import cycle_length, generate_random_solution, generate_complete_graph
+from common_functions import cycle_length, generate_random_solution, get_random_neighbor
 
-def simulated_annealing(graph, initial_temperature, cooling_rate):
+def simulated_annealing(graph, initial_temperature, cooling_rate, max_iterations, end_temperature=1):
     current_solution = generate_random_solution(graph)
     current_cycle_length = cycle_length(graph, current_solution)
     current_temperature = initial_temperature
+
+    best_solution = current_solution
+    best_cycle_length = current_cycle_length
+
+    scores = [] 
+    scores.append(current_cycle_length)
+
+    counter = 0
     
-    while current_temperature > 1e-5:
+    while current_temperature >= end_temperature and counter < max_iterations:
         random_neighbor = get_random_neighbor(current_solution)
         random_neighbor_length = cycle_length(graph, random_neighbor)
         
@@ -17,25 +25,29 @@ def simulated_annealing(graph, initial_temperature, cooling_rate):
             current_solution = random_neighbor
             current_cycle_length = random_neighbor_length
         
+        if current_cycle_length < best_cycle_length:
+            best_cycle_length = current_cycle_length
+            best_solution = current_solution
+        
         current_temperature *= cooling_rate
-    
-    return current_solution, current_cycle_length
+        scores.append(current_cycle_length)
 
-def get_random_neighbor(solution):
-    random_neighbor = solution.copy()
-    i, j = random.sample(range(len(solution)), 2)
-    random_neighbor[i], random_neighbor[j] = random_neighbor[j], random_neighbor[i]
+        counter += 1
 
-    return random_neighbor
+    return best_solution, best_cycle_length, scores
 
-def main():
-    graph = generate_complete_graph(10)
-    initial_temperature = 1000
-    cooling_rate = 0.99
-    
-    for _ in range(10):
-        print(simulated_annealing(graph, initial_temperature, cooling_rate))
+def calculate_initial_temperature(graph, num_samples=1000, coefficient=0.9):
+    total_neighbor_difference = 0.0
 
-if __name__ == "__main__":
-    main()
+    initial_solution = generate_random_solution(graph)
+    initial_length = cycle_length(graph, initial_solution)
 
+    for _ in range(num_samples):
+        neighbor = get_random_neighbor(initial_solution)
+        neighbor_length = cycle_length(graph, neighbor)
+        total_neighbor_difference += abs(neighbor_length - initial_length)
+
+    average_initial_neighbor_difference = total_neighbor_difference / num_samples
+    initial_temperature = coefficient * average_initial_neighbor_difference  
+
+    return initial_temperature
