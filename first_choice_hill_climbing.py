@@ -1,5 +1,5 @@
-import data_loader
 from common_functions import cycle_length, generate_random_solution, generate_complete_graph, get_random_neighbor
+import math
 
 def first_choice_hill_climbing(graph, max_attempts=1000):
     current_solution = generate_random_solution(graph)
@@ -22,19 +22,16 @@ def first_choice_hill_climbing(graph, max_attempts=1000):
 
     return current_solution, current_cycle_length
 
-def main():
-    # Load your TSPLIB instance here
-    # graph = ...
+def first_choice_hill_climbing_with_restart(graph, max_attempts, num_restarts):
+    best_cycle_length = math.inf
+    best_solution = None
 
-    # for i in range(10):
-    #     start_time = time.time()
-    #     cycle, cycle_length = first_choice_hill_climbing(graph)
-    #     print(time.time() - start_time)
+    for _ in range(num_restarts):
+        current_solution, current_cycle_length = first_choice_hill_climbing(graph, max_attempts)
 
-    graph = data_loader.adjacency_matrix
-    cycle, cycle_length = first_choice_hill_climbing(graph)
+        if current_cycle_length < best_cycle_length:
+            best_cycle_length = current_cycle_length
+            best_solution = current_solution
 
-    print(cycle_length)
-
-if __name__ == "__main__":
-    main()
+    return best_cycle_length, best_solution    
+               
