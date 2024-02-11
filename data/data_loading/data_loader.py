@@ -1,6 +1,6 @@
 import tsplib95
 import math
-from common_functions import cycle_length
+from utilities.common_functions import cycle_length
 
 def load_graph_data_euclidean(filepath):
     problem = tsplib95.load(filepath)

@@ -1,4 +1,4 @@
-from common_functions import cycle_length, generate_random_solution, generate_complete_graph, get_random_neighbor
+from utilities.common_functions import cycle_length, generate_random_solution, generate_complete_graph, get_random_neighbor
 import math
 
 def first_choice_hill_climbing(graph, max_attempts=1000):

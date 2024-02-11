@@ -1,6 +1,6 @@
 import random
 import math
-from common_functions import cycle_length, generate_random_solution, get_random_neighbor
+from utilities.common_functions import cycle_length, generate_random_solution, get_random_neighbor
 
 def simulated_annealing(graph, initial_temperature, cooling_rate, max_iterations, end_temperature=1):
     current_solution = generate_random_solution(graph)

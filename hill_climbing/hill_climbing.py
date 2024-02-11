@@ -1,5 +1,5 @@
 import time
-from common_functions import cycle_length, generate_random_solution, generate_complete_graph
+from utilities.common_functions import cycle_length, generate_random_solution, generate_complete_graph
 
 def get_neighbors(solution):
     neighbors = []
